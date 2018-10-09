@@ -1,0 +1,16 @@
+{
+  "name": "5werServer",
+  "version": "0.0.1",
+  "main": "app.js",
+  "repository": "https://github.com/zhaoshengyan/server.git",
+  "author": "zhaoxinke",
+  "license": "MIT",
+  "dependencies": {
+    "koa2": "^2.0.0-alpha.7",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  }
+}
