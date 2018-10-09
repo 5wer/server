@@ -1,5 +1,6 @@
+require('babel-polyfill')
 require('babel-register')({
-  presets: [ 'env' ]
-})
+  presets: ['env']
+});
 console.log('start app with babel');
-module.exports = require('./src/index.js')
+module.exports = require('./src/index.js');

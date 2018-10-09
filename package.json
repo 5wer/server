@@ -6,10 +6,15 @@
   "author": "zhaoxinke",
   "license": "MIT",
   "dependencies": {
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
     "koa2": "^2.0.0-alpha.7",
+    "koa2-validation": "^0.1.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0"
   }
