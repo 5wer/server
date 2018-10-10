@@ -1,11 +1,9 @@
-import router from 'koa-router';
+import {registe} from "../controller/user/registe";
 
-const _r = router();
-_r.get('/login', async function(ctx, next){
-  console.log('view the path LOGIN')
-})
-_r.post('/login', async function(ctx, next){
-  await console.log(ctx.body)
-})
+const router = require('koa-router')();
 
-export default _r
+router.post('/registe', registe);
+router.post('/login', async function(ctx, next) {
+});
+
+module.exports = router;
