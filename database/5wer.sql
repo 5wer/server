@@ -3,15 +3,15 @@
 
  Source Server         : 5wer
  Source Server Type    : MySQL
- Source Server Version : 80011
+ Source Server Version : 50722
  Source Host           : localhost:3306
  Source Schema         : 5wer
 
  Target Server Type    : MySQL
- Target Server Version : 80011
+ Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 10/10/2018 18:05:54
+ Date: 11/10/2018 18:09:50
 */
 
 SET NAMES utf8mb4;
@@ -22,26 +22,30 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
-  `id` int(16) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `birthday` date NULL DEFAULT NULL,
-  `gender` int(1) NULL DEFAULT NULL,
+  `id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `mobile` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` int(1) NULL DEFAULT NULL,
+  `birthday` date NULL DEFAULT NULL,
   `point` int(8) NULL DEFAULT NULL,
   `level` int(4) NULL DEFAULT NULL,
   `roles` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `createTime` datetime(0) NULL DEFAULT NULL,
-  `lastModifyTime` datetime(0) NULL DEFAULT NULL,
+  `lastModifyTime` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  `status` int(1) NULL DEFAULT NULL,
+  `salt` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `openid` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (0000000000000001, '', '', '', 'zxk', '2018-10-10', 1, '', 1, 9999, NULL, NULL, '2018-10-10 13:49:49', '2018-10-10 13:49:54');
+INSERT INTO `users` VALUES (00000008, NULL, 'zxk', 'ad3d0a2bf591f7ffdeeb233ac3871e08', NULL, NULL, NULL, NULL, NULL, '2018-10-11 07:49:12', '2018-10-11 07:49:12', NULL, '353266', 'undefined');
+INSERT INTO `users` VALUES (00000009, NULL, 'liuxiao', '05d51b6c2171207702284344fe6cca6b', NULL, NULL, NULL, NULL, NULL, '2018-10-11 07:52:05', '2018-10-11 07:52:05', NULL, '946118', 'undefined');
+INSERT INTO `users` VALUES (00000010, NULL, 'zhaoxinke', 'f6892f83a6e3c2adeb56938f12601151', NULL, NULL, NULL, NULL, NULL, '2018-10-11 08:23:14', '2018-10-11 08:23:14', NULL, '856597', 'undefined');
+INSERT INTO `users` VALUES (00000011, NULL, 'zhaozehao', '418a4c4ea7b409025a8692c350ebbc71', NULL, NULL, NULL, NULL, NULL, '2018-10-11 08:23:43', '2018-10-11 08:23:43', NULL, '160672', 'undefined');
+INSERT INTO `users` VALUES (00000012, NULL, 'sofia', '702c0222e2f119104d1796b99a81c293', NULL, NULL, NULL, NULL, NULL, '2018-10-11 09:54:44', '2018-10-11 09:54:44', NULL, '345893', 'undefined');
 
 SET FOREIGN_KEY_CHECKS = 1;
