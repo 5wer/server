@@ -1,0 +1,10 @@
+{
+  "db": {
+    "connectionLimit": 10,
+    "host": "localhost",
+    "user": "root",
+    "password": "hos2014,",
+    "database": "5wer"
+  },
+  "tokenSecret": "tokenSecret"
+}
