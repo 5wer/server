@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import moment from 'moment';
 import { query } from '../../utils/database';
-import { resBody } from '../../utils/resBody';
+import { resBody } from '../../utils';
 
 function getRandomSalt() {
   return Math.random()
