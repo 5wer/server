@@ -6,5 +6,8 @@
     "password": "hos2014,",
     "database": "5wer"
   },
-  "tokenSecret": "tokenSecret"
+  "token": {
+    "secret": "tokenSecret",
+    "expires": "1d"
+  }
 }

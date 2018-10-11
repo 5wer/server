@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
-const { tokenSecret } = require('../../config.json');
+const {
+  token: { secret, expires }
+} = require('../../config.json');
 
 export function getRandomSalt() {
   return Math.random()
@@ -29,9 +31,9 @@ export function resBody(data = [], msg = 'success') {
 }
 
 export function parseToken(token) {
-  return jwt.verify(token.replace(/^Bearer\s/, ''), tokenSecret);
+  return jwt.verify(token.replace(/^Bearer\s/, ''), secret);
 }
 
 export function signToken(payload = {}) {
-  return jwt.sign(payload, tokenSecret, { expiresIn: '5h' });
+  return jwt.sign(payload, secret, { expiresIn: expires });
 }

@@ -1,10 +1,13 @@
 import jwtKoa from 'koa-jwt';
 
 const importRouter = path => require(path).routes();
-const { tokenSecret } = require('../../config.json');
+const {
+  token: { secret }
+} = require('../../config.json');
+console.log('secret', secret)
 export default function(app) {
   app.use(
-    jwtKoa({ secret: tokenSecret }).unless({
+    jwtKoa({ secret }).unless({
       // 设置login、register接口，可以不需要认证访问
       path: [
         /^\/v\d\/login/,
