@@ -1,28 +1,8 @@
-import crypto from 'crypto';
 import moment from 'moment';
 import { query } from '../../utils/database';
-import { resBody } from '../../utils';
-
-function getRandomSalt() {
-  return Math.random()
-    .toString()
-    .slice(2, 8);
-}
-export function encryptMd5(password, salt) {
-  // md5实例每次都需要是个新的, 否则不重复执行update方法
-  const md5 = crypto.createHash('md5');
-  let _pw = password.split('');
-  if (salt) {
-    const _salt = salt.split('').reverse();
-    _pw = _pw.map((w, i) => {
-      return `${w}${_salt[i]}`;
-    });
-  }
-  return md5.update(_pw.join('')).digest('hex');
-}
+import { resBody, getRandomSalt, encryptMd5 } from '../../utils';
 
 export async function registe(ctx, next) {
-  ctx.status = 200;
   // 验证必要信息是否完整
   const { username, password, openid } = ctx.request.body;
   if (!username) {
