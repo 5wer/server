@@ -1,6 +1,6 @@
-import Koa from 'koa2';
-import bodyParser from 'koa-bodyparser';
-import router from './routes';
+import Koa from "koa2";
+import bodyParser from "koa-bodyparser";
+import router from "./routes";
 
 const app = new Koa();
 
@@ -19,11 +19,6 @@ app.use((ctx, next) => {
     }
   });
 });
-
-app.use((ctx, next) => {
-  ctx.response.heads['Access-Control-Allow-Origin'] = '*'
-  next()
-})
 
 // 监听
 app.listen(3000);

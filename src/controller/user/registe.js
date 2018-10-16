@@ -6,18 +6,18 @@ export async function registe(ctx, next) {
   // 验证必要信息是否完整
   const { username, password, openid } = ctx.request.body;
   if (!username) {
-    ctx.body = resBody(null, '用户名缺失');
+    ctx.body = resBody(null, '用户名缺失', 1);
     return;
   }
   if (!openid && !password) {
-    ctx.body = resBody(null, '密码缺失');
+    ctx.body = resBody(null, '密码缺失', 2);
     return;
   }
   const existUser = await query(
     `SELECT 1 FROM users WHERE username='${username}' limit 1`
   );
   if (existUser.length > 0) {
-    ctx.body = resBody(null, '用户名已被注册');
+    ctx.body = resBody(null, '用户名已被注册', 3);
     return;
   }
 
