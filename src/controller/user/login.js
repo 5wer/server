@@ -28,6 +28,8 @@ export async function getSelfInfo(ctx, next) {
   const self = await query(
     `SELECT * FROM users WHERE id='${userKey.id}' limit 1`
   );
-  ctx.body = resBody(self[0], "验证token成功");
+  delete self[0].password;
+  delete self[0].salt;
+  ctx.body = resBody(self[0], "获取用户信息成功");
   await next();
 }
