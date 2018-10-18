@@ -11,11 +11,23 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 17/10/2018 18:23:39
+ Date: 18/10/2018 10:20:53
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for books
+-- ----------------------------
+DROP TABLE IF EXISTS `books`;
+CREATE TABLE `books`  (
+  `id` int(8) NOT NULL COMMENT '文集id',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '文集状态1正常 0删除',
+  `authorId` int(8) NOT NULL COMMENT '作者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for posts
@@ -24,6 +36,7 @@ DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts`  (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `authorId` int(8) NOT NULL COMMENT '关联作者用户id',
+  `bookId` int(8) NULL DEFAULT NULL COMMENT '所属文集id',
   `mainImage` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主题url',
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
   `subTitle` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '副标题',
