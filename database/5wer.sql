@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 18/10/2018 10:20:53
+ Date: 22/10/2018 18:07:18
 */
 
 SET NAMES utf8mb4;
@@ -22,12 +22,20 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `books`;
 CREATE TABLE `books`  (
-  `id` int(8) NOT NULL COMMENT '文集id',
+  `id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT '文集id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
   `status` int(1) NOT NULL DEFAULT 1 COMMENT '文集状态1正常 0删除',
-  `authorId` int(8) NOT NULL COMMENT '作者id',
+  `authorId` int(8) UNSIGNED ZEROFILL NOT NULL COMMENT '作者id',
+  `createTime` datetime(0) NULL DEFAULT NULL,
+  `removeTime` datetime(0) NULL DEFAULT NULL,
+  `lastModifyTime` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of books
+-- ----------------------------
+INSERT INTO `books` VALUES (00000010, 'woqu22', 1, 00000008, '2018-10-22 07:22:53', NULL, '2018-10-22 10:03:24');
 
 -- ----------------------------
 -- Table structure for posts
@@ -46,6 +54,7 @@ CREATE TABLE `posts`  (
   `tags` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签列表',
   `createTime` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
   `lastUpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `status` int(1) NULL DEFAULT 1 COMMENT '1正常 0删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
