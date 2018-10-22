@@ -22,12 +22,17 @@ export async function login(ctx, next) {
   await next();
 }
 
-export async function getSelfInfo(ctx, next) {
+export async function getUserByToken(ctx) {
   const token = ctx.header.authorization;
   const userKey = parseToken(token);
   const self = await query(
     `SELECT * FROM users WHERE id='${userKey.id}' limit 1`
   );
+  return self[0];
+}
+
+export async function getSelfInfo(ctx, next) {
+  const self = await getUserByToken(ctx, next)
   delete self[0].password;
   delete self[0].salt;
   ctx.body = resBody(self[0], "获取用户信息成功");

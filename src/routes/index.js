@@ -33,6 +33,7 @@ export default function(app) {
     })
   );
   app.use(importRouter('./user'));
+  app.use(importRouter('./books'));
   // 添加全局中间件
   app.use(require('koa-router')().allowedMethods());
 }
