@@ -2,7 +2,6 @@ import moment from "moment";
 import _ from "lodash";
 import { query } from "../../utils/database";
 import { resBody } from "../../utils";
-import { getUserByToken } from "../user/login";
 
 export async function getBooks(status, ctx, next) {
   const books = await query(
@@ -99,8 +98,18 @@ export async function changeBookStatus(status, ctx, next) {
   (ctx.request.body.id = ctx.params.id), (ctx.request.body.status = status);
   const done = await update(ctx);
   if (done) {
-    const target = await getBookById(done, ctx.requester.id);
+    const target = await getBookById(done, ctx.params.id);
     ctx.body = resBody(target, "修改成功");
+  } else {
+    ctx.body = resBody(null, "目标数据不存在", 2);
+  }
+  await next();
+}
+export async function deleteBook(ctx, next) {
+  const book = await getBookById(ctx.params.id, ctx.requester.id);
+  if (book) {
+    await query(`DELETE FROM books WHERE id='${ctx.params.id}';`);
+    ctx.body = resBody(book, "删除成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
   }

@@ -1,5 +1,5 @@
 import { query } from "../../utils/database";
-import { resBody, parseToken, signToken, encryptMd5 } from "../../utils";
+import { resBody, signToken, encryptMd5, getUserByToken } from "../../utils";
 
 export async function login(ctx, next) {
   const { username, password } = ctx.request.body;
@@ -20,15 +20,6 @@ export async function login(ctx, next) {
     ctx.body = resBody(null, "用户名不存在", 2);
   }
   await next();
-}
-
-export async function getUserByToken(ctx) {
-  const token = ctx.header.authorization;
-  const userKey = parseToken(token);
-  const self = await query(
-    `SELECT * FROM users WHERE id='${userKey.id}' limit 1`
-  );
-  return self[0];
 }
 
 export async function getSelfInfo(ctx, next) {
