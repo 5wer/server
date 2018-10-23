@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import _ from "lodash";
+import { query } from "./database";
 
 const {
   token: { secret, expires }
@@ -29,6 +31,37 @@ export function resBody(data, msg = "success", code = 0) {
     data,
     code
   };
+}
+
+export const dontNeedToken = [
+  /^\/v\d\/login/,
+  /^\/v\d\/registe/,
+  /^((?!\/v\d).)*$/ // 设置除了私有接口外的其它资源，可以不需要认证访问
+];
+const checkUrlForAuthorNessery = (url, list) => !_.some(list, l => l.test(url));
+
+export async function getUserByToken(ctx) {
+  const token = ctx.header.authorization;
+  const userKey = parseToken(token);
+  const self = await query(
+    `SELECT * FROM users WHERE id='${userKey.id}' limit 1`
+  );
+  return self[0];
+}
+
+export async function beforeRequest(ctx, next) {
+  const needToken = checkUrlForAuthorNessery(ctx.url, dontNeedToken);
+  if (needToken) {
+    const user = await getUserByToken(ctx);
+    if(user) {
+      ctx.requester = user;
+      await next();
+    } else {
+      ctx.body = resBody(null, "请求用户不存在", 1);
+    }
+  } else {
+    await next();
+  }
 }
 
 export function parseToken(token) {
