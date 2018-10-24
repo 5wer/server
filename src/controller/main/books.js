@@ -9,7 +9,7 @@ export async function getBooks(status, ctx, next) {
       ctx.requester.id
     }' AND status='${status}'`
   );
-  const removed = status === "1" || "回收站";
+  const removed = status === 1 ? "" : "回收站";
   if (books.length > 0) {
     ctx.body = resBody(books, `获取books${removed}数据成功`);
   } else {
