@@ -1,7 +1,7 @@
 import moment from "moment";
 import _ from "lodash";
 import { query } from "../../utils/database";
-import { resBody } from "../../utils";
+import { resBody, getDataById } from "../../utils";
 
 export async function getBooks(status, ctx, next) {
   const books = await query(
@@ -33,23 +33,12 @@ export async function createBook(ctx, next) {
   await next();
 }
 
-export async function getBookById(id, uid) {
-  const target = await query(
-    `SELECT id, authorId FROM books WHERE id='${id}' limit 1`
-  );
-  if (target[0] && target[0].authorId === uid) {
-    return target[0];
-  } else {
-    return null;
-  }
-}
-
 export async function update(ctx) {
   const body = ctx.request.body,
     { id } = body,
     uid = ctx.requester.id;
   if (id) {
-    const target = await getBookById(id, uid);
+    const target = await getDataById('books', id, uid, 'id,authorId');
     if (target) {
       const sql = (function(body) {
         const start = "UPDATE books SET ",
@@ -87,7 +76,7 @@ export async function update(ctx) {
 export async function updateBook(ctx, next) {
   const done = await update(ctx);
   if (done) {
-    const target = await getBookById(done, ctx.requester.id);
+    const target = await getDataById('books', done, ctx.requester.id, 'id,authorId');
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
@@ -98,7 +87,7 @@ export async function changeBookStatus(status, ctx, next) {
   (ctx.request.body.id = ctx.params.id), (ctx.request.body.status = status);
   const done = await update(ctx);
   if (done) {
-    const target = await getBookById(done, ctx.params.id);
+    const target = await getDataById('books', done, ctx.params.id, 'id,authorId');
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
@@ -106,7 +95,7 @@ export async function changeBookStatus(status, ctx, next) {
   await next();
 }
 export async function deleteBook(ctx, next) {
-  const book = await getBookById(ctx.params.id, ctx.requester.id);
+  const book = await getDataById('books', ctx.params.id, ctx.requester.id, 'id,authorId');
   if (book) {
     await query(`DELETE FROM books WHERE id='${ctx.params.id}';`);
     ctx.body = resBody(book, "删除成功");

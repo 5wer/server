@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 25/10/2018 13:38:47
+ Date: 25/10/2018 17:50:15
 */
 
 SET NAMES utf8mb4;
@@ -36,7 +36,7 @@ CREATE TABLE `books`  (
 -- Records of books
 -- ----------------------------
 INSERT INTO `books` VALUES (00000039, 'wokao爽肤234', 1, 00000008, '2018-10-24 03:41:27', NULL, '2018-10-24 05:34:19');
-INSERT INTO `books` VALUES (00000040, 'hello', 1, 00000008, '2018-10-25 01:31:55', NULL, '2018-10-25 01:31:55');
+INSERT INTO `books` VALUES (00000040, 'hellodfdsf', 1, 00000008, '2018-10-25 01:31:55', NULL, '2018-10-25 09:05:57');
 
 -- ----------------------------
 -- Table structure for posts
@@ -45,11 +45,11 @@ DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts`  (
   `id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
   `authorId` int(8) UNSIGNED ZEROFILL NOT NULL COMMENT '关联作者用户id',
-  `bookId` int(8) NULL DEFAULT NULL COMMENT '所属文集id',
+  `bookId` int(8) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '所属文集id',
   `mainImage` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主题url',
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
   `summary` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '摘要',
-  `content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '正文,html',
+  `content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '正文,html',
   `color` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '色调类型',
   `type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章类型',
   `tags` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签列表',
@@ -57,15 +57,20 @@ CREATE TABLE `posts`  (
   `lastModifyTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `removeTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
   `status` int(1) NULL DEFAULT 1 COMMENT '1正常 0删除',
+  `isPublish` int(1) NULL DEFAULT 0 COMMENT '1发布 0下线',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of posts
 -- ----------------------------
-INSERT INTO `posts` VALUES (00000001, 00000008, NULL, NULL, 'hello world', NULL, '<div>海螺我的</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 03:34:10', '2018-10-25 05:38:02', NULL, 1);
-INSERT INTO `posts` VALUES (00000003, 00000008, NULL, NULL, 'hello world', NULL, '<div>hhhhhhhhh</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 03:41:14', '2018-10-25 05:36:43', NULL, 1);
-INSERT INTO `posts` VALUES (00000004, 00000008, NULL, NULL, 'hello world', NULL, '<div>hhhhhhhhh</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 05:36:53', '2018-10-25 05:36:53', NULL, 1);
+INSERT INTO `posts` VALUES (00000030, 00000008, 00000039, NULL, '2018-10-25 16:50:33', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:33', '2018-10-25 08:50:33', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000031, 00000008, 00000040, NULL, '2018-10-25 16:50:40', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:40', '2018-10-25 08:50:40', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000032, 00000008, 00000039, NULL, '2018-10-25 16:50:45', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:45', '2018-10-25 08:50:45', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000033, 00000008, 00000040, NULL, '2018-10-25 16:50:49', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:49', '2018-10-25 08:50:49', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000034, 00000008, 00000040, NULL, '2018-10-25 16:50:52', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:52', '2018-10-25 08:50:52', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000035, 00000008, 00000040, NULL, '2018-10-25 16:50:52', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:52', '2018-10-25 08:50:52', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000036, 00000008, 00000040, NULL, '2018-10-25 17:00:55', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 09:00:55', '2018-10-25 09:00:55', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for users

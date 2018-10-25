@@ -1,13 +1,15 @@
 import moment from "moment";
 import _ from "lodash";
 import { query } from "../../utils/database";
-import { resBody } from "../../utils";
+import { resBody, getDataById, parseInsertId } from "../../utils";
 
 export async function getPosts(status, ctx, next) {
   const posts = await query(
-    `SELECT * FROM posts WHERE authorId='${
+    `SELECT title, id, authorId, bookId, summary, lastModifyTime, status, isPublish FROM posts WHERE authorId='${
       ctx.requester.id
-    }' AND status='${status}'`
+    }' AND status='${status}' ${
+      ctx.params.bookId ? "AND bookId='" + ctx.params.bookId + "'" : ""
+    }`
   );
   const removed = status === 1 ? "" : "回收站";
   if (posts.length > 0) {
@@ -17,8 +19,30 @@ export async function getPosts(status, ctx, next) {
   }
   await next();
 }
+export async function getPost(ctx, next) {
+  const target = await getDataById(
+    "posts",
+    ctx.params.postId,
+    ctx.requester.id,
+    "*"
+  );
+  if (target) {
+    ctx.body = resBody(target, "获取文章成功");
+  } else {
+    ctx.body = resBody(null, "获取文章失败", 2);
+  }
+  await next();
+}
 export async function createPost(ctx, next) {
-  const { title, content, type, color, tags, bookId } = ctx.request.body;
+  const {
+    title,
+    content,
+    type,
+    color,
+    tags,
+    bookId,
+    isPublish = 0
+  } = ctx.request.body;
   const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
   const post = await query(
     `INSERT INTO
@@ -31,6 +55,7 @@ export async function createPost(ctx, next) {
       type,
       color,
       tags,
+      isPublish,
       createTime,
       lastModifyTime
     )
@@ -43,36 +68,31 @@ export async function createPost(ctx, next) {
       '${type}',
       '${color}',
       '${tags}',
+      '${isPublish}',
       '${now}',
       '${now}'
     )`
   );
   if (post) {
-    ctx.body = resBody(post, "创建文章成功");
+    const pid = parseInsertId(post.insertId);
+    const target = await getDataById(
+      "posts",
+      pid,
+      ctx.requester.id,
+      "id, title, authorId, bookId, summary, lastModifyTime, status, isPublish"
+    );
+    ctx.body = resBody(target, "创建文章成功");
   } else {
     ctx.body = resBody(null, "创建文章失败", 2);
   }
   await next();
 }
-
-export async function getPostById(id, uid) {
-  const target = await query(
-    `SELECT id, authorId FROM posts WHERE id='${id}' limit 1`
-  );
-  if (target[0] && target[0].authorId === uid) {
-    return target[0];
-  } else {
-    return null;
-  }
-}
-
 export async function update(ctx) {
   const body = ctx.request.body,
     { id } = body,
     uid = ctx.requester.id;
   if (id) {
-    const target = await getPostById(id, uid);
-    console.log('=-----', id, uid);
+    const target = await getDataById("posts", id, uid);
     if (target) {
       const sql = (function(body) {
         const start = "UPDATE posts SET ",
@@ -106,11 +126,10 @@ export async function update(ctx) {
     return false;
   }
 }
-
 export async function updatePost(ctx, next) {
   const done = await update(ctx);
   if (done) {
-    const target = await getPostById(done, ctx.requester.id);
+    const target = await getDataById("posts", done, ctx.requester.id);
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
@@ -121,7 +140,7 @@ export async function changePostStatus(status, ctx, next) {
   (ctx.request.body.id = ctx.params.id), (ctx.request.body.status = status);
   const done = await update(ctx);
   if (done) {
-    const target = await getPostById(done, ctx.params.id);
+    const target = await getDataById("posts", done, ctx.params.id);
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
@@ -129,7 +148,7 @@ export async function changePostStatus(status, ctx, next) {
   await next();
 }
 export async function deletePost(ctx, next) {
-  const post = await getPostById(ctx.params.id, ctx.requester.id);
+  const post = await getDataById("posts", ctx.params.id, ctx.requester.id);
   if (post) {
     await query(`DELETE FROM posts WHERE id='${ctx.params.id}';`);
     ctx.body = resBody(post, "删除成功");

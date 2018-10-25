@@ -48,12 +48,37 @@ export async function getUserByToken(ctx) {
   );
   return self[0];
 }
+/**
+ * @param tableName 表名
+ * @param id 数据主键
+ * @param uid 数据关联用户id
+ * @param fields 需要的字段,如果不定义只返回id,用','隔开的字符串
+ */
+export async function getDataById(tableName, id, uid, fields = "id") {
+  const target = await query(
+    `SELECT ${fields} FROM ${tableName} WHERE id='${id}' limit 1`
+  );
+  if (target[0] && target[0].authorId === uid) {
+    return target[0];
+  } else {
+    return null;
+  }
+}
+
+export function parseInsertId(int, count = 8) {
+  const str = int.toString();
+  const len = str.length;
+  if (count > len) {
+    return `${_.fill(new Array(count - len), "0").join("")}${int}`;
+  }
+  return int;
+}
 
 export async function beforeRequest(ctx, next) {
   const needToken = checkUrlForAuthorNessery(ctx.url, dontNeedToken);
   if (needToken) {
     const user = await getUserByToken(ctx);
-    if(user) {
+    if (user) {
       ctx.requester = user;
       await next();
     } else {
