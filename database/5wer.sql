@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 22/10/2018 18:07:18
+ Date: 25/10/2018 13:38:47
 */
 
 SET NAMES utf8mb4;
@@ -30,33 +30,42 @@ CREATE TABLE `books`  (
   `removeTime` datetime(0) NULL DEFAULT NULL,
   `lastModifyTime` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of books
 -- ----------------------------
-INSERT INTO `books` VALUES (00000010, 'woqu22', 1, 00000008, '2018-10-22 07:22:53', NULL, '2018-10-22 10:03:24');
+INSERT INTO `books` VALUES (00000039, 'wokao爽肤234', 1, 00000008, '2018-10-24 03:41:27', NULL, '2018-10-24 05:34:19');
+INSERT INTO `books` VALUES (00000040, 'hello', 1, 00000008, '2018-10-25 01:31:55', NULL, '2018-10-25 01:31:55');
 
 -- ----------------------------
 -- Table structure for posts
 -- ----------------------------
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts`  (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `authorId` int(8) NOT NULL COMMENT '关联作者用户id',
+  `id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `authorId` int(8) UNSIGNED ZEROFILL NOT NULL COMMENT '关联作者用户id',
   `bookId` int(8) NULL DEFAULT NULL COMMENT '所属文集id',
   `mainImage` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主题url',
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
-  `subTitle` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '副标题',
+  `summary` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '摘要',
   `content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '正文,html',
   `color` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '色调类型',
   `type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章类型',
   `tags` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签列表',
   `createTime` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
-  `lastUpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `lastModifyTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `removeTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
   `status` int(1) NULL DEFAULT 1 COMMENT '1正常 0删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of posts
+-- ----------------------------
+INSERT INTO `posts` VALUES (00000001, 00000008, NULL, NULL, 'hello world', NULL, '<div>海螺我的</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 03:34:10', '2018-10-25 05:38:02', NULL, 1);
+INSERT INTO `posts` VALUES (00000003, 00000008, NULL, NULL, 'hello world', NULL, '<div>hhhhhhhhh</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 03:41:14', '2018-10-25 05:36:43', NULL, 1);
+INSERT INTO `posts` VALUES (00000004, 00000008, NULL, NULL, 'hello world', NULL, '<div>hhhhhhhhh</div>', 'YELLOW', 'ARTICLE', '人物,景物,女,小孩', '2018-10-25 05:36:53', '2018-10-25 05:36:53', NULL, 1);
 
 -- ----------------------------
 -- Table structure for users

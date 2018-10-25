@@ -33,6 +33,7 @@ export default function(app) {
   app.use(beforeRequest); // 请求数据库之前先获取请求者的信息,挂载到ctx.requester上
   app.use(importRouter("./user"));
   app.use(importRouter("./books"));
+  app.use(importRouter("./posts"));
   // 添加全局中间件
   app.use(require("koa-router")().allowedMethods());
 }
