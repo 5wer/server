@@ -18,7 +18,7 @@ export async function getPosts(status, ctx, next) {
   await next();
 }
 export async function createPost(ctx, next) {
-  const { title, content, type, color, tags } = ctx.request.body;
+  const { title, content, type, color, tags, bookId } = ctx.request.body;
   const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
   const post = await query(
     `INSERT INTO
@@ -27,6 +27,7 @@ export async function createPost(ctx, next) {
       status,
       content,
       authorId,
+      bookId,
       type,
       color,
       tags,
@@ -38,6 +39,7 @@ export async function createPost(ctx, next) {
       '1',
       '${content}',
       '${ctx.requester.id}',
+      '${bookId}',
       '${type}',
       '${color}',
       '${tags}',
