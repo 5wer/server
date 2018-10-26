@@ -11,11 +11,41 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 25/10/2018 17:50:15
+ Date: 26/10/2018 17:43:40
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for basedata
+-- ----------------------------
+DROP TABLE IF EXISTS `basedata`;
+CREATE TABLE `basedata`  (
+  `id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+  `type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
+  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编码',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `lastModifyTime` datetime(0) NULL DEFAULT NULL COMMENT '编辑时间',
+  `status` int(1) NULL DEFAULT 1 COMMENT '状态1正常, 0失效',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of basedata
+-- ----------------------------
+INSERT INTO `basedata` VALUES (00000001, '红', 'COLOR', 'RED', '2018-10-26 17:38:31', '2018-10-26 17:38:35', 1);
+INSERT INTO `basedata` VALUES (00000002, '橙', 'COLOR', 'ORANGE', '2018-10-26 17:39:20', '2018-10-26 17:39:24', 1);
+INSERT INTO `basedata` VALUES (00000003, '黄', 'COLOR', 'YELLOW', '2018-10-26 17:41:38', '2018-10-26 17:41:40', 1);
+INSERT INTO `basedata` VALUES (00000004, '绿', 'COLOR', 'GREEN', '2018-10-26 17:41:43', '2018-10-26 17:41:46', 1);
+INSERT INTO `basedata` VALUES (00000005, '蓝', 'COLOR', 'BLUE', '2018-10-26 17:41:49', '2018-10-26 17:41:51', 1);
+INSERT INTO `basedata` VALUES (00000006, '靛', 'COLOR', 'INDIGO', '2018-10-26 17:41:55', '2018-10-26 17:41:58', 1);
+INSERT INTO `basedata` VALUES (00000007, '紫', 'COLOR', 'PURPLE', '2018-10-26 17:42:00', '2018-10-26 17:42:02', 1);
+INSERT INTO `basedata` VALUES (00000008, '暗', 'COLOR', 'DARD', '2018-10-26 17:42:05', '2018-10-26 17:42:08', 1);
+INSERT INTO `basedata` VALUES (00000009, '亮', 'COLOR', 'BRIGHT', '2018-10-26 17:42:10', '2018-10-26 17:42:12', 1);
+INSERT INTO `basedata` VALUES (00000010, '灰', 'COLOR', 'GRAY', '2018-10-26 17:42:16', '2018-10-26 17:42:18', 1);
+INSERT INTO `basedata` VALUES (00000011, '颜色', NULL, 'COLOR', '2018-10-26 17:42:56', '2018-10-26 17:42:59', 1);
 
 -- ----------------------------
 -- Table structure for books
@@ -59,7 +89,7 @@ CREATE TABLE `posts`  (
   `status` int(1) NULL DEFAULT 1 COMMENT '1正常 0删除',
   `isPublish` int(1) NULL DEFAULT 0 COMMENT '1发布 0下线',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of posts
@@ -71,6 +101,9 @@ INSERT INTO `posts` VALUES (00000033, 00000008, 00000040, NULL, '2018-10-25 16:5
 INSERT INTO `posts` VALUES (00000034, 00000008, 00000040, NULL, '2018-10-25 16:50:52', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:52', '2018-10-25 08:50:52', NULL, 1, 0);
 INSERT INTO `posts` VALUES (00000035, 00000008, 00000040, NULL, '2018-10-25 16:50:52', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 08:50:52', '2018-10-25 08:50:52', NULL, 1, 0);
 INSERT INTO `posts` VALUES (00000036, 00000008, 00000040, NULL, '2018-10-25 17:00:55', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 09:00:55', '2018-10-25 09:00:55', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000037, 00000008, 00000040, NULL, '2018-10-25 17:55:25', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 09:55:25', '2018-10-25 09:55:25', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000038, 00000008, 00000040, NULL, '2018-10-25 17:55:30', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-25 09:55:30', '2018-10-25 09:55:30', NULL, 1, 0);
+INSERT INTO `posts` VALUES (00000039, 00000008, 00000039, NULL, '2018-10-26 14:08:18', NULL, 'undefined', 'undefined', 'undefined', 'undefined', '2018-10-26 06:08:18', '2018-10-26 06:08:18', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for users
