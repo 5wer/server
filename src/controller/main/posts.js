@@ -136,11 +136,46 @@ export async function updatePost(ctx, next) {
   }
   await next();
 }
+export async function movePost(ctx, next) {
+  // todo 需要优化getDataById为getDataByIds, 需要一次性查多个表
+  const post = await getDataById(
+    "posts",
+    ctx.params.postId,
+    ctx.requester.id,
+    "id, authorId, bookId"
+  );
+  const book = await getDataById(
+    "books",
+    ctx.params.bookId,
+    ctx.requester.id,
+    "id, authorId"
+  );
+  if (post && book) {
+    if (post.bookId === ctx.params.bookId) {
+      // 不能移动到本来就所在的文集中
+      ctx.body = resBody(null, "不能移动到所在的文集中", 2);
+    } else {
+      ctx.request.body.bookId = ctx.params.bookId;
+      ctx.request.body.id = ctx.params.postId;
+      const done = await update(ctx);
+      if(done) {
+        ctx.body = resBody(ctx.params, "移动成功");
+      } else {
+        ctx.body = resBody(null, "移动失败", 2);
+      }
+    }
+  } else if (!post) {
+    ctx.body = resBody(null, "文章不存在", 2);
+  } else if (!book) {
+    ctx.body = resBody(null, "目标文集不存在", 2);
+  }
+  await next();
+}
 export async function changePostStatus(status, ctx, next) {
   (ctx.request.body.id = ctx.params.id), (ctx.request.body.status = status);
   const done = await update(ctx);
   if (done) {
-    const target = await getDataById("posts", done, ctx.params.id);
+    const target = await getDataById("posts", done, ctx.requester.id);
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);

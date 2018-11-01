@@ -54,12 +54,16 @@ export async function getUserByToken(ctx) {
  * @param uid 数据关联用户id
  * @param fields 需要的字段,如果不定义只返回id,用','隔开的字符串
  */
-export async function getDataById(tableName, id, uid, fields = "id") {
+export async function getDataById(tableName, id, uid, fields = "id, authorId") {
   const target = await query(
     `SELECT ${fields} FROM ${tableName} WHERE id='${id}' limit 1`
   );
-  if (target[0] && target[0].authorId === uid) {
-    return target[0];
+  console.log(target[0])
+  if (target[0]) {
+    if ((uid && target[0].authorId === uid) || !uid) {
+      return target[0];
+    }
+    return null;
   } else {
     return null;
   }

@@ -38,7 +38,7 @@ export async function update(ctx) {
     { id } = body,
     uid = ctx.requester.id;
   if (id) {
-    const target = await getDataById('books', id, uid, 'id,authorId');
+    const target = await getDataById("books", id, uid, "id,authorId");
     if (target) {
       const sql = (function(body) {
         const start = "UPDATE books SET ",
@@ -76,7 +76,12 @@ export async function update(ctx) {
 export async function updateBook(ctx, next) {
   const done = await update(ctx);
   if (done) {
-    const target = await getDataById('books', done, ctx.requester.id, 'id,authorId');
+    const target = await getDataById(
+      "books",
+      done,
+      ctx.requester.id,
+      "id,authorId"
+    );
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
@@ -87,18 +92,39 @@ export async function changeBookStatus(status, ctx, next) {
   (ctx.request.body.id = ctx.params.id), (ctx.request.body.status = status);
   const done = await update(ctx);
   if (done) {
-    const target = await getDataById('books', done, ctx.params.id, 'id,authorId');
+    const target = await getDataById(
+      "books",
+      done,
+      ctx.params.id,
+      "id,authorId"
+    );
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
   }
   await next();
 }
+export async function hasPost(bookId) {
+  const post = await query(
+    `SELECT id FROM posts WHERE bookId='${bookId}' limit 1;`
+  );
+  return !!post;
+}
 export async function deleteBook(ctx, next) {
-  const book = await getDataById('books', ctx.params.id, ctx.requester.id, 'id,authorId');
+  const book = await getDataById(
+    "books",
+    ctx.params.id,
+    ctx.requester.id,
+    "id,authorId"
+  );
   if (book) {
-    await query(`DELETE FROM books WHERE id='${ctx.params.id}';`);
-    ctx.body = resBody(book, "删除成功");
+    const has = await hasPost(ctx.params.id);
+    if (has) {
+      ctx.body = resBody(null, "该文集包含文章, 不能删除", 1);
+    } else {
+      await query(`DELETE FROM books WHERE id='${ctx.params.id}';`);
+      ctx.body = resBody(book, "删除成功");
+    }
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
   }

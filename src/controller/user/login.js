@@ -24,8 +24,8 @@ export async function login(ctx, next) {
 
 export async function getSelfInfo(ctx, next) {
   const self = await getUserByToken(ctx, next)
-  delete self[0].password;
-  delete self[0].salt;
-  ctx.body = resBody(self[0], "获取用户信息成功");
+  delete self.password;
+  delete self.salt;
+  ctx.body = resBody(self, "获取用户信息成功");
   await next();
 }
