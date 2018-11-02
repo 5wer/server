@@ -58,7 +58,6 @@ export async function getDataById(tableName, id, uid, fields = "id, authorId") {
   const target = await query(
     `SELECT ${fields} FROM ${tableName} WHERE id='${id}' limit 1`
   );
-  console.log(target[0])
   if (target[0]) {
     if ((uid && target[0].authorId === uid) || !uid) {
       return target[0];
@@ -99,4 +98,14 @@ export function parseToken(token) {
 
 export function signToken(payload = {}) {
   return jwt.sign(payload, secret, { expiresIn: expires });
+}
+/**
+ * translate the Empty value to Null, not a string 'undefined'
+ * @param {} value 
+ */
+export function E2N(value){
+  if(value){
+    return `'${value}'`
+  }
+  return null
 }

@@ -1,11 +1,14 @@
 import moment from "moment";
 import _ from "lodash";
 import { query } from "../../utils/database";
-import { resBody, getDataById, parseInsertId } from "../../utils";
+import { resBody, getDataById, parseInsertId, E2N } from "../../utils";
+
+const POST_FIELDS =
+  "id, title, authorId, bookId, summary, type, tags, color, createTime, lastModifyTime, status, isPublish";
 
 export async function getPosts(status, ctx, next) {
   const posts = await query(
-    `SELECT title, id, authorId, bookId, summary, lastModifyTime, status, isPublish FROM posts WHERE authorId='${
+    `SELECT ${POST_FIELDS} FROM posts WHERE authorId='${
       ctx.requester.id
     }' AND status='${status}' ${
       ctx.params.bookId ? "AND bookId='" + ctx.params.bookId + "'" : ""
@@ -24,7 +27,7 @@ export async function getPost(ctx, next) {
     "posts",
     ctx.params.postId,
     ctx.requester.id,
-    "*"
+    POST_FIELDS
   );
   if (target) {
     ctx.body = resBody(target, "获取文章成功");
@@ -62,12 +65,12 @@ export async function createPost(ctx, next) {
     values(
       '${title}',
       '1',
-      '${content}',
+      ${E2N(content)},
       '${ctx.requester.id}',
       '${bookId}',
-      '${type}',
-      '${color}',
-      '${tags}',
+      ${E2N(type)},
+      ${E2N(color)},
+      ${E2N(tags)},
       '${isPublish}',
       '${now}',
       '${now}'
@@ -79,7 +82,7 @@ export async function createPost(ctx, next) {
       "posts",
       pid,
       ctx.requester.id,
-      "id, title, authorId, bookId, summary, lastModifyTime, status, isPublish"
+      POST_FIELDS
     );
     ctx.body = resBody(target, "创建文章成功");
   } else {
@@ -102,6 +105,8 @@ export async function update(ctx) {
         _.forEach(body, (v, k) => {
           switch (k) {
             case "id":
+            case "lastModifyTime":
+            case "createTime":
               break;
             case "status":
               if (v === 0) {
@@ -158,7 +163,7 @@ export async function movePost(ctx, next) {
       ctx.request.body.bookId = ctx.params.bookId;
       ctx.request.body.id = ctx.params.postId;
       const done = await update(ctx);
-      if(done) {
+      if (done) {
         ctx.body = resBody(ctx.params, "移动成功");
       } else {
         ctx.body = resBody(null, "移动失败", 2);
