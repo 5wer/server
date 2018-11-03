@@ -4,11 +4,11 @@ import { query } from "../../utils/database";
 import { resBody, getDataById, parseInsertId, E2N } from "../../utils";
 
 const POST_FIELDS =
-  "id, title, authorId, bookId, summary, type, tags, color, createTime, lastModifyTime, status, isPublish";
-
+  "id, title, authorId, content, bookId, summary, type, tags, color, createTime, lastModifyTime, status, isPublish";
+const POST_LIST_FIELDS = "id, title, bookId, summary, type, lastModifyTime, isPublish"
 export async function getPosts(status, ctx, next) {
   const posts = await query(
-    `SELECT ${POST_FIELDS} FROM posts WHERE authorId='${
+    `SELECT ${POST_LIST_FIELDS} FROM posts WHERE authorId='${
       ctx.requester.id
     }' AND status='${status}' ${
       ctx.params.bookId ? "AND bookId='" + ctx.params.bookId + "'" : ""
@@ -27,7 +27,7 @@ export async function getPost(ctx, next) {
     "posts",
     ctx.params.postId,
     ctx.requester.id,
-    POST_FIELDS
+    POST_FIELDS,
   );
   if (target) {
     ctx.body = resBody(target, "获取文章成功");
@@ -134,7 +134,7 @@ export async function update(ctx) {
 export async function updatePost(ctx, next) {
   const done = await update(ctx);
   if (done) {
-    const target = await getDataById("posts", done, ctx.requester.id);
+    const target = await getDataById("posts", done, ctx.requester.id, POST_FIELDS);
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
