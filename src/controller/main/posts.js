@@ -5,7 +5,8 @@ import { resBody, getDataById, parseInsertId, E2N } from "../../utils";
 
 const POST_FIELDS =
   "id, title, authorId, content, bookId, summary, type, tags, color, createTime, lastModifyTime, status, isPublish";
-const POST_LIST_FIELDS = "id, title, bookId, summary, type, lastModifyTime, isPublish"
+const POST_LIST_FIELDS =
+  "id, title, bookId, summary, type, lastModifyTime, isPublish";
 export async function getPosts(status, ctx, next) {
   const posts = await query(
     `SELECT ${POST_LIST_FIELDS} FROM posts WHERE authorId='${
@@ -27,7 +28,7 @@ export async function getPost(ctx, next) {
     "posts",
     ctx.params.postId,
     ctx.requester.id,
-    POST_FIELDS,
+    POST_FIELDS
   );
   if (target) {
     ctx.body = resBody(target, "获取文章成功");
@@ -103,28 +104,31 @@ export async function update(ctx) {
         let fields = "";
         const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
         _.forEach(body, (v, k) => {
-          switch (k) {
-            case "id":
-            case "lastModifyTime":
-            case "createTime":
-              break;
-            case "status":
-              if (v === 0) {
-                fields += `removeTime='${now}',`;
-              } else if (v === 1) {
-                fields += `removeTime=null,`;
+          if (v) {
+            switch (k) {
+              case "id":
+              case "lastModifyTime":
+              case "createTime":
+                break;
+              case "status":
+                if (v === 0) {
+                  fields += `removeTime='${now}',`;
+                } else if (v === 1) {
+                  fields += `removeTime=null,`;
+                }
+                fields += `status='${v}',`;
+                break;
+              default: {
+                fields += `${k}='${v}',`;
+                break;
               }
-              fields += `status='${v}',`;
-              break;
-            default: {
-              fields += `${k}='${v}',`;
-              break;
             }
           }
         });
         fields += `lastModifyTime='${now}'`;
         return `${start}${fields}${end}`;
       })(body);
+      console.log(sql);
       await query(sql);
       return body.id;
     }
@@ -134,7 +138,12 @@ export async function update(ctx) {
 export async function updatePost(ctx, next) {
   const done = await update(ctx);
   if (done) {
-    const target = await getDataById("posts", done, ctx.requester.id, POST_FIELDS);
+    const target = await getDataById(
+      "posts",
+      done,
+      ctx.requester.id,
+      POST_FIELDS
+    );
     ctx.body = resBody(target, "修改成功");
   } else {
     ctx.body = resBody(null, "目标数据不存在", 2);
