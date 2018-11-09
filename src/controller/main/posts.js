@@ -47,7 +47,7 @@ export async function createPost(ctx, next) {
     bookId,
     isPublish = 0
   } = ctx.request.body;
-  const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+  const now = moment().format("YYYY-MM-DD HH:mm:ss");
   const post = await query(
     `INSERT INTO
     posts(
@@ -102,7 +102,7 @@ export async function update(ctx) {
         const start = "UPDATE posts SET ",
           end = ` WHERE id='${body.id}'`;
         let fields = "";
-        const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+        const now = moment().format("YYYY-MM-DD HH:mm:ss");
         _.forEach(body, (v, k) => {
           if (v) {
             switch (k) {
