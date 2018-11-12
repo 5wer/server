@@ -108,7 +108,7 @@ export async function hasPost(bookId) {
   const post = await query(
     `SELECT id FROM posts WHERE bookId='${bookId}' limit 1;`
   );
-  return !!post;
+  return !_.isEmpty(post);
 }
 export async function deleteBook(ctx, next) {
   const book = await getDataById(

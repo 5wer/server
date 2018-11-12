@@ -104,7 +104,7 @@ export async function update(ctx) {
         let fields = "";
         const now = moment().format("YYYY-MM-DD HH:mm:ss");
         _.forEach(body, (v, k) => {
-          if (v) {
+          if (v !== null && v !== undefined) {
             switch (k) {
               case "id":
               case "lastModifyTime":
@@ -128,7 +128,6 @@ export async function update(ctx) {
         fields += `lastModifyTime='${now}'`;
         return `${start}${fields}${end}`;
       })(body);
-      console.log(sql);
       await query(sql);
       return body.id;
     }
