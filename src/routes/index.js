@@ -10,8 +10,9 @@ const {
 export default function(app) {
   app.use(
     cors({
-      origin: function(ctx) {
-        if (ctx.url === "/v1") {
+      'Access-Control-Allow-Origin': function(ctx) {
+        console.log(ctx.url, ctx.url.includes("/v1"))
+        if (ctx.url.includes("/v1")) {
           return "*"; // 允许来自所有域名请求
         }
         return "http://localhost:3333";

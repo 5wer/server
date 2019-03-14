@@ -1,3 +1,4 @@
+import qiniu from "qiniu";
 import { query } from "../../utils/database";
 import { resBody, signToken, encryptMd5, getUserByToken } from "../../utils";
 
@@ -23,9 +24,27 @@ export async function login(ctx, next) {
 }
 
 export async function getSelfInfo(ctx, next) {
-  const self = await getUserByToken(ctx, next)
+  const self = await getUserByToken(ctx, next);
   delete self.password;
   delete self.salt;
   ctx.body = resBody(self, "获取用户信息成功");
+  await next();
+}
+const AK = "SdD9P00YKwiiHjDyzP0KcSzH4XJlaf89N8saE41J";
+const SK = "5pevxRelXK87b5g8vDRrVK1ztSEVcAOBnIgwzGr9";
+const DL = 7200000
+export async function qiniuToken(ctx, next) {
+  const mac = new qiniu.auth.digest.Mac(AK, SK);
+  const options = {
+    scope: 'dcmall',
+    deadline: DL
+  };
+  const putPolicy = new qiniu.rs.PutPolicy(options);
+  const uploadToken = putPolicy.uploadToken(mac);
+  if (uploadToken) {
+    ctx.body = resBody({uploadToken, deadline: DL }, "获取七牛token成功", 0);
+  } else {
+    ctx.body = resBody(null, "获取七牛token失败", 2);
+  }
   await next();
 }
